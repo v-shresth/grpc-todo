@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "todo-grpc/pb";
+
+import "google/protobuf/empty.proto";
+
+service UserService {
+  rpc Register(RegisterRequest) returns (RegisterResponse) {}
+  rpc Login(LoginRequest) returns (LoginResponse) {}
+  rpc Logout(LogoutRequest) returns (google.protobuf.Empty) {}
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string password = 4;
+}
+
+message RegisterRequest {
+  User user = 1;
+}
+
+message RegisterResponse {
+  string user_id = 1;
+  string token = 2;
+}
+
+message LoginRequest {
+  User user = 1;
+}
+
+message LoginResponse {
+  string token = 1;
+}
+
+message LogoutRequest {}

@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "todo-grpc/pb";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/empty.proto";
+
+service TodoService {
+  rpc CreateTodo(CreateTodoReq) returns (CreateTodoRes) {}
+  rpc UpdateTodo(UpdateTodoReq) returns (UpdateTodoRes) {}
+  rpc DeleteTodo(DeleteTodoReq) returns (google.protobuf.Empty) {}
+  rpc GetTodo(GetTodoReq) returns (Todo) {}
+  rpc ListTodo(ListTodoReq) returns (ListTodoRes) {}
+  rpc StreamTodo(StreamTodoReq) returns (stream StreamTodoRes) {}
+}
+
+message Todo {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  bool status = 4;
+  enum Priority {
+    HIGH = 0;
+    MEDIUM = 1;
+    LOW = 2;
+  }
+  Priority priority = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp deadline = 7;
+  google.protobuf.Timestamp updated_at = 8;
+  string user_id = 9;
+}
+
+message CreateTodoReq {
+  Todo todo = 1;
+}
+
+message CreateTodoRes {
+  Todo todo = 1;
+}
+
+message UpdateTodoReq {
+  Todo todo = 1;
+  google.protobuf.FieldMask field_mask = 2;
+}
+
+message UpdateTodoRes {
+  Todo todo = 1;
+}
+
+message DeleteTodoReq {
+  string todo_id = 1;
+  string reason = 2;
+}
+
+message GetTodoReq {
+  string todo_id = 1;
+}
+
+message StreamTodoReq {}
+
+message ListTodoReq {
+  int32 limit = 1;
+  int32 page = 2;
+}
+
+message ListTodoRes {
+  repeated Todo todos = 1;
+  int32 count = 2;
+}
+
+message StreamTodoRes {
+  Todo todo = 1;
+  int32 count = 2;
+}
