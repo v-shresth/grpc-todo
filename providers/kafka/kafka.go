@@ -12,18 +12,18 @@ import (
 type KafkaProvider struct {
 	deadLineNearbyWriter *kafka.Writer
 	premiumEndingWriter  *kafka.Writer
-	envProvider          *utils.EnvConfig
+	envProvider          utils.EnvConfig
 	logger               *utils.Logger
 }
 
 type Provider interface {
 	// Publish PublishData publishes data to a message queue
-	Publish(topic models.QueueTopics, message []byte)
+	Publish(topic models.QueueTopic, message []byte)
 	Reconnect()
 	Close()
 }
 
-func NewKafkaProvider(env *utils.EnvConfig, logger *utils.Logger) Provider {
+func NewKafkaProvider(env utils.EnvConfig, logger *utils.Logger) Provider {
 	kafkaHost := env.GetKafkaHost()
 	deadLineNearbyWriter := &kafka.Writer{
 		Addr:        kafka.TCP(kafkaHost),
@@ -48,7 +48,7 @@ func NewKafkaProvider(env *utils.EnvConfig, logger *utils.Logger) Provider {
 }
 
 // Publish publishes data to a Kafka topic
-func (k *KafkaProvider) Publish(topic models.QueueTopics, message []byte) {
+func (k *KafkaProvider) Publish(topic models.QueueTopic, message []byte) {
 	switch topic {
 	case models.TopicDeadlineNearby:
 		err := k.deadLineNearbyWriter.WriteMessages(

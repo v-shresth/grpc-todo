@@ -38,7 +38,7 @@ func AuthMiddleware(
 			return nil, err
 		}
 
-		md.Append(utils.AuthedUserIdHex, userClaims.UserID)
+		md.Append(string(utils.AuthedUserIdHex), userClaims.UserID)
 
 		newCtx = metadata.NewIncomingContext(newCtx, md)
 	}
@@ -65,7 +65,7 @@ func AuthStreamInterceptor(
 			return err
 		}
 
-		md.Append(utils.AuthedUserIdHex, userClaims.UserID)
+		md.Append(string(utils.AuthedUserIdHex), userClaims.UserID)
 
 		newCtx = metadata.NewIncomingContext(newCtx, md)
 	}

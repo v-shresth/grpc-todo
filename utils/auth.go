@@ -15,7 +15,7 @@ import (
 
 const AuthorizationKey = "authorization"
 
-func ValidateJwtToken(md metadata.MD, config *EnvConfig) (*models.UserClaims, error) {
+func ValidateJwtToken(md metadata.MD, config EnvConfig) (*models.UserClaims, error) {
 	authHeaders, ok := md[AuthorizationKey]
 	if !ok || len(authHeaders) == 0 {
 		return nil, grpc.Errorf(codes.Unauthenticated, "token not present in headers")
@@ -30,7 +30,7 @@ func ValidateJwtToken(md metadata.MD, config *EnvConfig) (*models.UserClaims, er
 	claims := &models.UserClaims{}
 	parseToken, err := jwt.ParseWithClaims(
 		token, claims, func(token *jwt.Token) (interface{}, error) {
-			return []byte(config.jwtSecret), nil
+			return []byte(config.GetJwtSecret()), nil
 		},
 	)
 	if err != nil {
@@ -45,7 +45,7 @@ func ValidateJwtToken(md metadata.MD, config *EnvConfig) (*models.UserClaims, er
 	return claims, nil
 }
 
-func GenerateToken(userID string, config *EnvConfig) (string, error) {
+func GenerateToken(userID string, config EnvConfig) (string, error) {
 	// Create token
 	jwtExpirationTime := time.Now().Add(time.Hour * 24).Unix()
 	claims := &models.UserClaims{
@@ -58,7 +58,7 @@ func GenerateToken(userID string, config *EnvConfig) (string, error) {
 
 	// Generate encoded token and send it as response.
 	// The signing string should be secret (a generated UUID works too)
-	t, err := token.SignedString([]byte(config.jwtSecret))
+	t, err := token.SignedString([]byte(config.GetJwtSecret()))
 	if err != nil {
 		return "", err
 	}
@@ -78,7 +78,7 @@ func CheckPassword(password, hash string) bool {
 
 func GetUserNameFromContext(ctx context.Context) string {
 	if md, ok := metadata.FromIncomingContext(ctx); ok {
-		if authedUsernames := md.Get(AuthedUserIdHex); len(authedUsernames) > 0 {
+		if authedUsernames := md.Get(string(AuthedUserIdHex)); len(authedUsernames) > 0 {
 			return authedUsernames[0]
 		}
 	}

@@ -14,10 +14,14 @@ import (
 type serviceClient struct {
 	userRepo userRepo
 	logger   *utils.Logger
-	config   *utils.EnvConfig
+	config   utils.EnvConfig
 }
 
-func NewUserService(db *mongo.Client, logger *utils.Logger, config *utils.EnvConfig) service.UserService {
+func NewUserService(
+	db *mongo.Client,
+	logger *utils.Logger,
+	config utils.EnvConfig,
+) service.UserService {
 	return &serviceClient{
 		userRepo: newRepoClient(db, logger),
 		logger:   logger,

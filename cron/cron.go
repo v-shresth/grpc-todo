@@ -9,18 +9,18 @@ import (
 	"todo-grpc/service"
 )
 
-func InitCron(ctx context.Context, ts service.TodoService, kfp kafkaQueueProvider.Provider) {
+func InitCron(ts service.TodoService, kfp kafkaQueueProvider.Provider) {
 	c := cron.New()
 	c.AddFunc(
-		"@every 3600m", func() {
-			CheckDeadlineIsNear(ctx, ts, kfp)
+		"@every 3m", func() {
+			CheckDeadlineIsNear(ts, kfp)
 		},
 	)
 	c.Start()
 }
 
-func CheckDeadlineIsNear(ctx context.Context, ts service.TodoService, kfp kafkaQueueProvider.Provider) {
-	todos, err := ts.FetchTodosWithNearbyDeadline(ctx)
+func CheckDeadlineIsNear(ts service.TodoService, kfp kafkaQueueProvider.Provider) {
+	todos, err := ts.FetchTodosWithNearbyDeadline(context.Background())
 	if err != nil {
 		return
 	}
@@ -28,7 +28,6 @@ func CheckDeadlineIsNear(ctx context.Context, ts service.TodoService, kfp kafkaQ
 	for _, todo := range todos {
 		data, err := json.Marshal(&todo)
 		if err != nil {
-			//err = ("unable to marshall message to bytes for kafka queue", err)
 			return
 		}
 		kfp.Publish(models.TopicDeadlineNearby, data)

@@ -13,7 +13,8 @@ type Server struct {
 
 	TodoSvc       service.TodoService
 	UserSvc       service.UserService
-	Config        *utils.EnvConfig
+	AlertSvc      service.AlertService
+	Config        utils.EnvConfig
 	Logger        *utils.Logger
 	KafkaProvider kafkaQueueProvider.Provider
 }

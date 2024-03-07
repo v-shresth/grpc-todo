@@ -18,7 +18,7 @@ func NewLogger() *Logger {
 }
 
 func logError(
-	logger *logr.Logger,
+	logger *Logger,
 	err error,
 	msg string,
 ) {

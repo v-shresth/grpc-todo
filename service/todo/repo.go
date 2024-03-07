@@ -39,7 +39,9 @@ type todosRepo interface {
 	) ([]models.Todo, error)
 }
 
-func newRepoClient(db *mongo.Client, logger *utils.Logger) todosRepo {
+func newRepoClient(
+	db *mongo.Client, logger *utils.Logger,
+) todosRepo {
 	return &repoClient{
 		db:     db,
 		todoC:  utils.GetCollection(db, "todos"),
@@ -53,7 +55,7 @@ func (r *repoClient) insertTodo(ctx context.Context, todo *models.Todo) (primiti
 		todo,
 	)
 	if err != nil {
-		return primitive.NewObjectID(), err
+		return primitive.NilObjectID, err
 	}
 	return insertedResp.InsertedID.(primitive.ObjectID), nil
 }

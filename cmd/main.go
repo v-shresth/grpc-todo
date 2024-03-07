@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net"
+	"todo-grpc/internal"
 	kafkaQueueProvider "todo-grpc/providers/kafka"
 	"todo-grpc/server"
 	"todo-grpc/utils"
@@ -23,6 +24,8 @@ func main() {
 		logger.Error(err, "enable to connect database")
 		log.Fatal()
 	}
+
+	go internal.SubscribeAllPartitions(logger, config)
 
 	grpcServer := server.NewServer(db, logger, config, kafkaProvider)
 

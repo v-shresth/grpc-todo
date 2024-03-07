@@ -1,8 +1,8 @@
 package models
 
-type QueueTopics string
+type QueueTopic string
 
 const (
-	TopicDeadlineNearby QueueTopics = "deadline_nearby"
-	TopicPremiumEnding  QueueTopics = "premium_ending"
+	TopicDeadlineNearby QueueTopic = "deadline_nearby"
+	TopicPremiumEnding  QueueTopic = "premium_ending"
 )

@@ -26,7 +26,7 @@ type serviceClient struct {
 func NewTodoService(
 	db *mongo.Client,
 	logger *utils.Logger,
-	config *utils.EnvConfig,
+	config utils.EnvConfig,
 ) service.TodoService {
 	return &serviceClient{
 		todoRepo:    newRepoClient(db, logger),
@@ -49,6 +49,7 @@ func (s *serviceClient) CreateTodo(ctx context.Context, todo *models.Todo) (*mod
 	callback := func(ctx mongo.SessionContext) (interface{}, error) {
 		todo.ID = primitive.NewObjectID()
 		todo.CreateTime = primitive.NewDateTimeFromTime(time.Now())
+		todo.DeadLine = primitive.NewDateTimeFromTime(time.Now().Add(-1 * time.Hour))
 		todoId, err := s.todoRepo.insertTodo(ctx, todo)
 		if err != nil {
 			return nil, err

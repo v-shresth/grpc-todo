@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"github.com/go-logr/logr"
 	"github.com/gogo/status"
 	"google.golang.org/grpc/codes"
 )
@@ -55,7 +54,7 @@ func (e *GeneralError) Error() string {
 	return e.Msg
 }
 
-func CreateStatusErrorFromError(err error, logger *logr.Logger) error {
+func CreateStatusErrorFromError(err error, logger *Logger) error {
 	switch e := err.(type) {
 	case *DBInternalError:
 		logError(

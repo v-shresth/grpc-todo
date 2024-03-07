@@ -13,7 +13,6 @@ func ConvertApiUserToDbUser(apiUser *pb.User) *models.User {
 		Password: strings.TrimSpace(apiUser.Password),
 		Email:    strings.TrimSpace(apiUser.Email),
 	}
-
 }
 
 func ValidateRegisterUserReq(req *pb.RegisterRequest) error {

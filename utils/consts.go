@@ -1,6 +1,9 @@
 package utils
 
+type contextKey string
+
 const (
-	AuthedUsername  = "authedUsername"
-	AuthedUserIdHex = "authedUserIdHex"
+	AuthedUsername  contextKey = "authedUsername"
+	AuthedUserIdHex contextKey = "authedUserIdHex"
+	RequestIdKey    contextKey = "requestIdKey"
 )

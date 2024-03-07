@@ -3,7 +3,6 @@ package utils
 import (
 	"errors"
 	"fmt"
-	"github.com/go-logr/logr"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/protobuf/types/known/fieldmaskpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -104,7 +103,7 @@ func ConvertDbTodoApiToto(dbTodo *models.Todo) *pb.Todo {
 	return apiTodo
 }
 
-func ParseListTodoReq(req *pb.ListTodoReq, logger *logr.Logger) (*models.ListTodoFilter, error) {
+func ParseListTodoReq(req *pb.ListTodoReq, logger *Logger) (*models.ListTodoFilter, error) {
 	if req.GetLimit() < 1 || req.GetLimit() > 20 {
 		if req.GetLimit() > 20 {
 			return nil, CreateStatusErrorFromError(errors.New("limit cannot exceed 20"), logger)

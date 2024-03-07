@@ -4,8 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/golang/protobuf/ptypes/timestamp"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -32,10 +30,4 @@ func GetCollection(db *mongo.Client, collectionName string) *mongo.Collection {
 	// In our system mongo db uses "dev" as the namespace for all environment's collection so hard coding this value here
 	collection := db.Database("dev").Collection(collectionName)
 	return collection
-}
-
-func ConvertPbTimestampToBsonDateTime(
-	pbTS *timestamp.Timestamp,
-) primitive.DateTime {
-	return primitive.NewDateTimeFromTime(pbTS.AsTime())
 }

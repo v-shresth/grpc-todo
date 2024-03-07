@@ -22,7 +22,9 @@ type userRepo interface {
 	startSession() (mongo.Session, error)
 }
 
-func newRepoClient(db *mongo.Client, logger *utils.Logger) userRepo {
+func newRepoClient(
+	db *mongo.Client, logger *utils.Logger,
+) userRepo {
 	return &repoClient{
 		db:     db,
 		usersC: utils.GetCollection(db, "users"),
@@ -33,7 +35,7 @@ func newRepoClient(db *mongo.Client, logger *utils.Logger) userRepo {
 func (r *repoClient) insertUser(ctx context.Context, user *models.User) (primitive.ObjectID, error) {
 	insertedRes, err := r.usersC.InsertOne(ctx, user)
 	if err != nil {
-		return primitive.NewObjectID(), err
+		return primitive.NilObjectID, err
 	}
 
 	return insertedRes.InsertedID.(primitive.ObjectID), err
